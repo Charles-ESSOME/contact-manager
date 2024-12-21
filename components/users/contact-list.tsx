@@ -1,5 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
-/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client"
 
 import * as React from "react";
@@ -141,7 +139,7 @@ const createColumns = (
 const UserActions: React.FC<{
   user: User;
   onEdit: (user: User) => void;
-  onDelete: (id: string) => void;
+  onDelete: (user: User) => void;
 }> = ({ user, onEdit, onDelete }) => (
   <DropdownMenu>
     <DropdownMenuTrigger asChild>
@@ -174,10 +172,7 @@ const UserActions: React.FC<{
   </DropdownMenu>
 );
 
-export const UsersList: React.FC<UsersListProps> = ({ users, onEdit, onDelete, currentPage, itemsPerPage, }) => {
-
-  const startIndex = (currentPage - 1) * itemsPerPage
-  const paginatedUsers = users.slice(startIndex, startIndex + itemsPerPage);
+export const UsersList: React.FC<UsersListProps> = ({ users, onEdit, onDelete }) => {
 
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([]);

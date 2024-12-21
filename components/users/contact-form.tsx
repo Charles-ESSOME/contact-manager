@@ -39,7 +39,7 @@ interface UserFormProps {
 }
 
 
-export default function UserForm({ onSubmit, initialData }: UserFormProps) {
+export default function ContactForm({ onSubmit, initialData }: UserFormProps) {
 
   const form = useForm<UserFormValues>({
     resolver: zodResolver(userSchema),

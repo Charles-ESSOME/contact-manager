@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 "use client";
 
 import { toast } from "sonner";
@@ -8,9 +7,9 @@ import React, { useState } from "react";
 import { RootState } from "@/store/store";
 import { useSelector } from "react-redux";
 import { Card } from "@/components/ui/card";
-import UserForm from "@/components/users/contact-form";
+import ContactForm from "@/components/users/contact-form";
 import { useContactsRedux } from "@/hooks/use-user-redux";
-import { UsersList } from "@/components/users/user-list";
+import { UsersList } from "@/components/users/contact-list";
 import { Dialog, DialogTrigger } from "@/components/ui/dialog";
 
 
@@ -80,7 +79,7 @@ export default function UserManagement() {
                   New Contact
                 </button>
               </DialogTrigger>
-              <UserForm onSubmit={onSubmit} initialData={currUser} />
+              <ContactForm onSubmit={onSubmit} initialData={currUser} />
             </Dialog>
           </div>
           <main className="p-6">
