@@ -1,6 +1,6 @@
 import React from 'react'
 import { zodResolver } from "@hookform/resolvers/zod"
-import { Controller, useForm } from "react-hook-form"
+import { useForm } from "react-hook-form"
 import * as z from "zod"
 import { Button } from "@/components/ui/button"
 import {
@@ -15,7 +15,10 @@ import { Input } from "@/components/ui/input"
 import { Plus, Minus } from "lucide-react"
 import { DialogContent, DialogHeader, DialogTitle } from '../ui/dialog'
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from '../ui/select'
-import { UserCategory } from '@/types/User'
+import { UserCategory } from '@/types/User';
+
+const phoneRegex = /^6[0-9]{8}$/ // Format: 6XXXXXXXX
+
 
 const userSchema = z.object({
   firstName: z.string().min(2, {
@@ -25,8 +28,8 @@ const userSchema = z.object({
     message: "Name must contain at least 2 characters..",
   }),
   emails: z.array(z.string().email("AInvalid email address")),
-  phones: z.array(z.string().min(10, "Invalid phone number")),
-  category: z.string(z.string().min(2, "Invalid category")),
+  tel: z.string().regex(phoneRegex, 'Phone must be in format: 6XXXXXXXX'),
+category: z.string(z.string().min(2, "Invalid category")),
 })
 
 
@@ -197,23 +200,23 @@ export default function UserForm({ onSubmit, initialData }: UserFormProps) {
                 <FormItem>
                   <FormLabel>Category</FormLabel>
                   <FormControl>
-                  <Select
-                    onValueChange={(value) => field.onChange(Number(value))} // Conversion en nombre
-                    defaultValue={field.value?.toString()} // Conversion en string pour l'affichage
-                  >
-                    <SelectTrigger>
-                      <SelectValue placeholder="Select a category" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectGroup>
-                        {Object.entries(UserCategory).map(([key, value]) => (
-                          typeof value !== 'number' && <SelectItem key={key} value={value}>
-                            Category {value}
-                          </SelectItem>
-                        ))}
-                      </SelectGroup>
-                    </SelectContent>
-                  </Select>
+                    <Select
+                      onValueChange={(value) => field.onChange(Number(value))} // Conversion en nombre
+                      defaultValue={field.value?.toString()} // Conversion en string pour l'affichage
+                    >
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select a category" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectGroup>
+                          {Object.entries(UserCategory).map(([key, value]) => (
+                            typeof value !== 'number' && <SelectItem key={key} value={value}>
+                              Category {value}
+                            </SelectItem>
+                          ))}
+                        </SelectGroup>
+                      </SelectContent>
+                    </Select>
                   </FormControl>
                   <FormMessage />
                 </FormItem>

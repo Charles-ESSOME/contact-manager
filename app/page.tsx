@@ -8,7 +8,7 @@ import React, { useState } from "react";
 import { RootState } from "@/store/store";
 import { useSelector } from "react-redux";
 import { Card } from "@/components/ui/card";
-import UserForm from "@/components/users/UserForm";
+import UserForm from "@/components/users/contact-form";
 import { useContactsRedux } from "@/hooks/use-user-redux";
 import { UsersList } from "@/components/users/user-list";
 import { Dialog, DialogTrigger } from "@/components/ui/dialog";
