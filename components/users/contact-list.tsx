@@ -57,20 +57,31 @@ const SortableHeader: React.FC<{ column: any; title: string }> = ({ column, titl
 
 const createColumns = (
   onEdit: (user: User) => void,
-  onDelete: (id: string) => void
+  onDelete: (id: User) => void
 ): ColumnDef<User>[] => [
     {
       id: "select",
       header: ({ table }) => (
         <Checkbox
           checked={
-            table.getIsAllPageRowsSelected() ||
-            (table.getIsSomePageRowsSelected() && "indeterminate")
+            table.getIsAllPageRowsSelected() as any ||
+            (table.getIsSomePageRowsSelected() && "indeterminate") as any
           }
           onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
           aria-label="Select all"
         />
       ),
+      /*************  ✨ Codeium Command ⭐  *************/
+      /**
+       * Renders a checkbox for selecting a row.
+       * The checkbox is checked based on the row's selection state.
+       * When the checkbox state changes, it toggles the row's selection.
+       *
+       * @param row - The current row object containing data and state.
+       * @returns JSX element rendering a checkbox for row selection.
+       */
+
+      /******  419e767a-ecb1-4164-806d-f39483409581  *******/
       cell: ({ row }) => (
         <Checkbox
           checked={row.getIsSelected()}
@@ -95,7 +106,7 @@ const createColumns = (
       accessorKey: "emails",
       header: ({ column }) => <SortableHeader column={column} title="Emails" />,
       cell: ({ row }) => <div>
-        {(row.getValue("emails") as string[]).map((value ,i ) => (
+        {(row.getValue("emails") as string[]).map((value, i) => (
           <div className="lowercase" key={i}>- {value}</div>
         ))}
 
@@ -154,12 +165,12 @@ const UserActions: React.FC<{
         onClick={() => navigator.clipboard.writeText((user?.firstName ?? '') + ' ' + (user?.lastName ?? '') || "")}
         className="text-gray-600 hover:text-gray-900 mr-4"
       >
-        <ClipboardCopy size={18}/>
+        <ClipboardCopy size={18} />
         Copy user name
       </DropdownMenuItem>
       <DropdownMenuSeparator />
       <DropdownMenuItem onClick={() => onEdit(user)} className="text-blue-600 hover:text-blue-900 mr-4">
-      <Edit size={18} />
+        <Edit size={18} />
         Edit user</DropdownMenuItem>
       <DropdownMenuItem
         onClick={() => onDelete(user)}
