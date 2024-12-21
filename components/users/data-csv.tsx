@@ -65,7 +65,7 @@ export function CSVActions() {
 
         const importContacts = () => {
           try {
-            contacts.forEach(contact => {
+            contacts.forEach((contact: any) => {
               addNewContact(contact);
             });
 

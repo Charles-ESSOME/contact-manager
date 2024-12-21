@@ -19,7 +19,7 @@ export const convertToCSV = (contacts: User[]): string => {
   ].join('\n');
 };
 
-export const parseCSV = (csvContent: string): Omit<User, 'id' | 'createdAt' | 'updatedAt'>[] => {
+export const parseCSV = (csvContent: string) => {
   const lines = csvContent.split('\n');
   if (lines.length < 2) throw new Error('Le fichier CSV est vide ou invalide');
 
@@ -54,9 +54,9 @@ export const downloadCSV = (csvContent: string, filename: string): void => {
   const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
   const link = document.createElement('a');
   
-  if (navigator.msSaveBlob) {
+  if ((navigator as any).msSaveBlob) {
     // Pour IE
-    navigator.msSaveBlob(blob, filename);
+    (navigator as any).msSaveBlob(blob, filename);
   } else {
     link.href = URL.createObjectURL(blob);
     link.setAttribute('download', filename);
