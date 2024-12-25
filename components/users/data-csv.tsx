@@ -57,7 +57,7 @@ export function CSVActions() {
     try {
       const content = await file.text();
       const contacts = parseCSV(content);
-
+      
       // Confirmation avant import
       return new Promise<void>((resolve, reject) => {
         const dialog = document.createElement('div');
@@ -141,7 +141,7 @@ export function CSVActions() {
         </AlertDialogTrigger>
         <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle>Exporter les contacts</AlertDialogTitle>
+            <AlertDialogTitle>Export contacts</AlertDialogTitle>
             <AlertDialogDescription>
               This action will export all your contacts to a CSV file.
               Do you want to continue?  

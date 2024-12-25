@@ -68,7 +68,7 @@ export default function UserManagement() {
   return (
     <div className="px-8 py-8 ">
       <Card>
-        <div className="flex-1 overflow-auto">
+        <div className="flex-1">
           <div className="px-6 py-4 flex justify-between items-center">
             <h1 className="text-xl font-bold mb-4">User contact management</h1>
 

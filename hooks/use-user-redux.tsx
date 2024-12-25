@@ -46,7 +46,6 @@ export function useContactsRedux() {
   );
 
   const selectContact = useCallback(
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     (contact: any) => {      
       dispatch(setSelectedContact(contact));
     },

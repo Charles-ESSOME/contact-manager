@@ -215,7 +215,7 @@ export const UsersList: React.FC<UsersListProps> = ({ users, onEdit, onDelete })
     <div className="w-full space-y-4">
       <Filters table={table} />
 
-      <div className="rounded-md border h-[65vh]">
+      <div className="rounded-md border h-[65vh] overflow-auto">
         <Table>
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (

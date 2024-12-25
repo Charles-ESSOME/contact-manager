@@ -15,7 +15,7 @@ import { Input } from "@/components/ui/input"
 import { Plus, Minus } from "lucide-react"
 import { DialogContent, DialogHeader, DialogTitle } from '../ui/dialog'
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from '../ui/select'
-import { UserCategory } from '@/types/User';
+import { UserCategory } from '@/types/User'
 
 const phoneRegex = /^6[0-9]{8}$/ // Format: 6XXXXXXXX
 
@@ -28,8 +28,9 @@ const userSchema = z.object({
     message: "Name must contain at least 2 characters..",
   }),
   emails: z.array(z.string().email("AInvalid email address")),
-  tel: z.string().regex(phoneRegex, 'Phone must be in format: 6XXXXXXXX'),
-category: z.string(z.string().min(2, "Invalid category")),
+  // tel: z.string().regex(phoneRegex, 'Phone must be in format: 6XXXXXXXX'),
+  phones: z.array(z.string().min(9, "Invalid phone number")),
+  category: z.string(z.string().min(2, "Invalid category")),
 })
 
 
@@ -37,6 +38,7 @@ interface UserFormProps {
   onSubmit: (data: UserFormValues) => void
   initialData?: UserFormValues
 }
+
 
 
 export default function ContactForm({ onSubmit, initialData }: UserFormProps) {
@@ -201,7 +203,7 @@ export default function ContactForm({ onSubmit, initialData }: UserFormProps) {
                   <FormLabel>Category</FormLabel>
                   <FormControl>
                     <Select
-                      onValueChange={(value) => field.onChange(Number(value))} // Conversion en nombre
+                      onValueChange={(value) => field.onChange(value)} // Conversion en nombre
                       defaultValue={field.value?.toString()} // Conversion en string pour l'affichage
                     >
                       <SelectTrigger>
@@ -209,11 +211,17 @@ export default function ContactForm({ onSubmit, initialData }: UserFormProps) {
                       </SelectTrigger>
                       <SelectContent>
                         <SelectGroup>
-                          {Object.entries(UserCategory).map(([key, value]) => (
-                            typeof value !== 'number' && <SelectItem key={key} value={value}>
+                          {/* {Object.entries(UserCategory).map(([key, value], i) => (
+                            typeof value !== 'number' && <SelectItem key={i} value={'VIPi '}>
                               Category {value}
                             </SelectItem>
-                          ))}
+                          ))} */}
+                          <SelectItem value={'VIP'}>
+                            Category VIP
+                          </SelectItem>
+                          <SelectItem value={'CLASSIC'}>
+                            Category CLASSIC
+                          </SelectItem>
                         </SelectGroup>
                       </SelectContent>
                     </Select>
