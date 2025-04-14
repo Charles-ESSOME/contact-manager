@@ -19,7 +19,6 @@ import { UserCategory } from '@/types/User'
 
 const phoneRegex = /^6[0-9]{8}$/ // Format: 6XXXXXXXX
 
-
 const userSchema = z.object({
   firstName: z.string().min(2, {
     message: "First name must contain at least 2 characters.",
@@ -38,8 +37,6 @@ interface UserFormProps {
   onSubmit: (data: UserFormValues) => void
   initialData?: UserFormValues
 }
-
-
 
 export default function ContactForm({ onSubmit, initialData }: UserFormProps) {
 

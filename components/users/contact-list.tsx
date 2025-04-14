@@ -55,97 +55,83 @@ const SortableHeader: React.FC<{ column: any; title: string }> = ({ column, titl
   </Button>
 );
 
-const createColumns = (
-  onEdit: (user: User) => void,
-  onDelete: (id: User) => void
-): ColumnDef<User>[] => [
-    {
-      id: "select",
-      header: ({ table }) => (
-        <Checkbox
-          checked={
-            table.getIsAllPageRowsSelected() as any ||
-            (table.getIsSomePageRowsSelected() && "indeterminate") as any
-          }
-          onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
-          aria-label="Select all"
-        />
-      ),
-      /*************  ✨ Codeium Command ⭐  *************/
-      /**
-       * Renders a checkbox for selecting a row.
-       * The checkbox is checked based on the row's selection state.
-       * When the checkbox state changes, it toggles the row's selection.
-       *
-       * @param row - The current row object containing data and state.
-       * @returns JSX element rendering a checkbox for row selection.
-       */
+const createColumns = (onEdit: (user: User) => void, onDelete: (id: User) => void): ColumnDef<User>[] => [
+  {
+    id: "select",
+    header: ({ table }) => (
+      <Checkbox
+        checked={
+          table.getIsAllPageRowsSelected() as any ||
+          (table.getIsSomePageRowsSelected() && "indeterminate") as any
+        }
+        onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
+        aria-label="Select all"
+      />
+    ),
+    cell: ({ row }) => (
+      <Checkbox
+        checked={row.getIsSelected()}
+        onCheckedChange={(value) => row.toggleSelected(!!value)}
+        aria-label="Select row"
+      />
+    ),
+    enableSorting: false,
+    enableHiding: false,
+  },
+  {
+    accessorKey: "firstName",
+    header: ({ column }) => <SortableHeader column={column} title="First name" />,
+    cell: ({ row }) => <div className="capitalize">{row.getValue("firstName")}</div>,
+  },
+  {
+    accessorKey: "lastName",
+    header: ({ column }) => <SortableHeader column={column} title="Last name" />,
+    cell: ({ row }) => <div className="capitalize">{row.getValue("lastName")}</div>,
+  },
+  {
+    accessorKey: "emails",
+    header: ({ column }) => <SortableHeader column={column} title="Emails" />,
+    cell: ({ row }) => <div>
+      {(row.getValue("emails") as string[]).map((value, i) => (
+        <div className="lowercase" key={i}>- {value}</div>
+      ))}
 
-      /******  419e767a-ecb1-4164-806d-f39483409581  *******/
-      cell: ({ row }) => (
-        <Checkbox
-          checked={row.getIsSelected()}
-          onCheckedChange={(value) => row.toggleSelected(!!value)}
-          aria-label="Select row"
-        />
-      ),
-      enableSorting: false,
-      enableHiding: false,
-    },
-    {
-      accessorKey: "firstName",
-      header: ({ column }) => <SortableHeader column={column} title="First name" />,
-      cell: ({ row }) => <div className="capitalize">{row.getValue("firstName")}</div>,
-    },
-    {
-      accessorKey: "lastName",
-      header: ({ column }) => <SortableHeader column={column} title="Last name" />,
-      cell: ({ row }) => <div className="capitalize">{row.getValue("lastName")}</div>,
-    },
-    {
-      accessorKey: "emails",
-      header: ({ column }) => <SortableHeader column={column} title="Emails" />,
-      cell: ({ row }) => <div>
-        {(row.getValue("emails") as string[]).map((value, i) => (
-          <div className="lowercase" key={i}>- {value}</div>
-        ))}
-
-      </div>
-    },
-    {
-      accessorKey: "phones",
-      header: ({ column }) => <SortableHeader column={column} title="Phones" />,
-      cell: ({ row }) => <div>{row.getValue("phones")}</div>,
-    },
-    {
-      accessorKey: "category",
-      header: "Category",
-      cell: ({ row }) => <div className={`capitalize px-2 inline-flex flex text-xs leading-5 font-semibold rounded-full
+    </div>
+  },
+  {
+    accessorKey: "phones",
+    header: ({ column }) => <SortableHeader column={column} title="Phones" />,
+    cell: ({ row }) => <div>{row.getValue("phones")}</div>,
+  },
+  {
+    accessorKey: "category",
+    header: "Category",
+    cell: ({ row }) => <div className={`capitalize px-2 inline-flex flex text-xs leading-5 font-semibold rounded-full
          ${row.getValue("category") === UserCategory.VIP ? "bg-green-100 text-green-800" : "bg-gray-100 text-gray-800"}`
-      }>{
-          row.getValue('category')}
-      </div>,
-    },
-    {
-      accessorKey: "status",
-      header: ({ column }) => <SortableHeader column={column} title="Status" />,
-      cell: ({ row }) => (
-        <span
-          className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${row.getValue("status") ? "bg-green-100 text-green-800" : "bg-gray-100 text-gray-800"
-            }`}
-        >
-          {row?.getValue("status") ? 'ACTIVE' : "Inactive"}
-        </span>
-      ),
-    },
-    {
-      id: "actions",
-      enableHiding: false,
-      cell: ({ row }) => (
-        <UserActions user={row.original} onEdit={onEdit} onDelete={onDelete} />
-      ),
-    },
-  ];
+    }>{
+        row.getValue('category')}
+    </div>,
+  },
+  {
+    accessorKey: "status",
+    header: ({ column }) => <SortableHeader column={column} title="Status" />,
+    cell: ({ row }) => (
+      <span
+        className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${row.getValue("status") ? "bg-green-100 text-green-800" : "bg-gray-100 text-gray-800"
+          }`}
+      >
+        {row?.getValue("status") ? 'ACTIVE' : "Inactive"}
+      </span>
+    ),
+  },
+  {
+    id: "actions",
+    enableHiding: false,
+    cell: ({ row }) => (
+      <UserActions user={row.original} onEdit={onEdit} onDelete={onDelete} />
+    ),
+  },
+];
 
 const UserActions: React.FC<{
   user: User;
