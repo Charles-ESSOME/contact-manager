@@ -75,26 +75,31 @@ export default function ContactForm({ onSubmit, initialData }: UserFormProps) {
   }
 
   return (
-    <DialogContent className="sm:max-w-[500px]">
-      <DialogHeader>
-        <DialogTitle>
+    <DialogContent className="sm:max-w-[500px] w-[95vw] max-h-[90vh] overflow-y-auto p-4 sm:p-6">
+      <DialogHeader className="mb-4">
+        <DialogTitle className="text-lg sm:text-xl text-center">
           {initialData ? "Update contact" : "New contact"}
         </DialogTitle>
       </DialogHeader>
 
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-          <div className="grid grid-cols-2 gap-4">
+        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-5">
+          {/* Name fields - stack on mobile, grid on tablet+ */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
             <FormField
               control={form.control}
               name="firstName"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>First Name</FormLabel>
+                  <FormLabel className="text-sm sm:text-base">First Name</FormLabel>
                   <FormControl>
-                    <Input {...field} />
+                    <Input 
+                      {...field} 
+                      className="h-9 sm:h-10 text-sm sm:text-base" 
+                      placeholder="Enter first name"
+                    />
                   </FormControl>
-                  <FormMessage />
+                  <FormMessage className="text-xs sm:text-sm" />
                 </FormItem>
               )}
             />
@@ -103,9 +108,13 @@ export default function ContactForm({ onSubmit, initialData }: UserFormProps) {
               name="lastName"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Last Name</FormLabel>
+                  <FormLabel className="text-sm sm:text-base">Last Name</FormLabel>
                   <FormControl>
-                    <Input {...field} />
+                    <Input 
+                      {...field} 
+                      className="h-9 sm:h-10 text-sm sm:text-base" 
+                      placeholder="Enter last name"
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -115,18 +124,23 @@ export default function ContactForm({ onSubmit, initialData }: UserFormProps) {
 
           {/* Emails */}
           <div className="space-y-2">
-            <FormLabel>Emails</FormLabel>
+            <FormLabel className="text-sm sm:text-base">Emails</FormLabel>
             {form.watch("emails").map((_, index) => (
-              <div key={index} className="flex gap-2">
+              <div key={index} className="flex items-center gap-2">
                 <FormField
                   control={form.control}
                   name={`emails.${index}`}
                   render={({ field }) => (
                     <FormItem className="flex-1">
                       <FormControl>
-                        <Input {...field} type="email" />
+                        <Input 
+                          {...field} 
+                          type="email" 
+                          className="h-9 sm:h-10 text-sm sm:text-base" 
+                          placeholder="email@example.com"
+                        />
                       </FormControl>
-                      <FormMessage />
+                      <FormMessage className="text-xs sm:text-sm" />
                     </FormItem>
                   )}
                 />
@@ -134,10 +148,11 @@ export default function ContactForm({ onSubmit, initialData }: UserFormProps) {
                   type="button"
                   variant="outline"
                   size="icon"
+                  className="h-9 w-9 sm:h-10 sm:w-10 flex-shrink-0"
                   onClick={() => removeField("emails", index)}
                   disabled={form.watch("emails").length === 1}
                 >
-                  <Minus className="h-4 w-4" />
+                  <Minus className="h-3 w-3 sm:h-4 sm:w-4" />
                 </Button>
               </div>
             ))}
@@ -145,27 +160,33 @@ export default function ContactForm({ onSubmit, initialData }: UserFormProps) {
               type="button"
               variant="outline"
               size="sm"
+              className="text-xs sm:text-sm h-8 sm:h-9 mt-1"
               onClick={() => addField("emails")}
             >
-              <Plus className="h-4 w-4 mr-2" />
+              <Plus className="h-3 w-3 sm:h-4 sm:w-4 mr-1 sm:mr-2" />
               Add email
             </Button>
           </div>
 
           {/* Phones */}
           <div className="space-y-2">
-            <FormLabel>Phones</FormLabel>
+            <FormLabel className="text-sm sm:text-base">Phones</FormLabel>
             {form.watch("phones").map((_, index) => (
-              <div key={index} className="flex gap-2">
+              <div key={index} className="flex items-center gap-2">
                 <FormField
                   control={form.control}
                   name={`phones.${index}`}
                   render={({ field }) => (
                     <FormItem className="flex-1">
                       <FormControl>
-                        <Input {...field} type="tel" />
+                        <Input 
+                          {...field} 
+                          type="tel" 
+                          className="h-9 sm:h-10 text-sm sm:text-base" 
+                          placeholder="Enter phone number"
+                        />
                       </FormControl>
-                      <FormMessage />
+                      <FormMessage className="text-xs sm:text-sm" />
                     </FormItem>
                   )}
                 />
@@ -173,10 +194,11 @@ export default function ContactForm({ onSubmit, initialData }: UserFormProps) {
                   type="button"
                   variant="outline"
                   size="icon"
+                  className="h-9 w-9 sm:h-10 sm:w-10 flex-shrink-0"
                   onClick={() => removeField("phones", index)}
                   disabled={form.watch("phones").length === 1}
                 >
-                  <Minus className="h-4 w-4" />
+                  <Minus className="h-3 w-3 sm:h-4 sm:w-4" />
                 </Button>
               </div>
             ))}
@@ -184,9 +206,10 @@ export default function ContactForm({ onSubmit, initialData }: UserFormProps) {
               type="button"
               variant="outline"
               size="sm"
+              className="text-xs sm:text-sm h-8 sm:h-9 mt-1"
               onClick={() => addField("phones")}
             >
-              <Plus className="h-4 w-4 mr-2" />
+              <Plus className="h-3 w-3 sm:h-4 sm:w-4 mr-1 sm:mr-2" />
               Add phone
             </Button>
           </div>
@@ -197,13 +220,13 @@ export default function ContactForm({ onSubmit, initialData }: UserFormProps) {
               name="category"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Category</FormLabel>
+                  <FormLabel className="text-sm sm:text-base">Category</FormLabel>
                   <FormControl>
                     <Select
                       onValueChange={(value) => field.onChange(value)} // Conversion en nombre
                       defaultValue={field.value?.toString()} // Conversion en string pour l'affichage
                     >
-                      <SelectTrigger>
+                      <SelectTrigger className="h-9 sm:h-10 text-sm sm:text-base">
                         <SelectValue placeholder="Select a category" />
                       </SelectTrigger>
                       <SelectContent>
@@ -213,10 +236,10 @@ export default function ContactForm({ onSubmit, initialData }: UserFormProps) {
                               Category {value}
                             </SelectItem>
                           ))} */}
-                          <SelectItem value={'VIP'}>
+                          <SelectItem value={'VIP'} className="text-sm sm:text-base">
                             Category VIP
                           </SelectItem>
-                          <SelectItem value={'CLASSIC'}>
+                          <SelectItem value={'CLASSIC'} className="text-sm sm:text-base">
                             Category CLASSIC
                           </SelectItem>
                         </SelectGroup>
@@ -229,9 +252,15 @@ export default function ContactForm({ onSubmit, initialData }: UserFormProps) {
             />
           </div>
 
-          <Button type="submit" className="w-full bg-blue-500">
-            {initialData ? "Update" : "Create"}
-          </Button>
+          {/* Submit button */}
+          <div className="pt-2">
+            <Button 
+              type="submit" 
+              className="w-full bg-blue-500 hover:bg-blue-600 h-9 sm:h-10 text-sm sm:text-base"
+            >
+              {initialData ? "Update" : "Create"}
+            </Button>
+          </div>
         </form>
       </Form>
     </DialogContent>

@@ -100,7 +100,7 @@ export function CSVActions() {
         <DialogTrigger asChild>
           <Button variant="outline" className='bg-blue-200'>
             <Upload className="w-4 h-4 mr-2" />
-            Import CSV
+            Import
           </Button>
         </DialogTrigger>
         <DialogContent>
@@ -136,7 +136,7 @@ export function CSVActions() {
         <AlertDialogTrigger asChild>
           <Button variant="outline" className=' bg-green-200'>
             <Download className="w-4 h-4 mr-2" />
-            Export CSV
+            Export
           </Button>
         </AlertDialogTrigger>
         <AlertDialogContent>

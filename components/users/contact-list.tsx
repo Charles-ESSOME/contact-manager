@@ -91,17 +91,28 @@ const createColumns = (onEdit: (user: User) => void, onDelete: (id: User) => voi
   {
     accessorKey: "emails",
     header: ({ column }) => <SortableHeader column={column} title="Emails" />,
-    cell: ({ row }) => <div>
-      {(row.getValue("emails") as string[]).map((value, i) => (
-        <div className="lowercase" key={i}>- {value}</div>
-      ))}
-
-    </div>
+    cell: ({ row }) => {
+      const emails = row.getValue("emails") as string[];
+      return (
+        <div className="truncate max-w-[150px] md:max-w-[200px] lg:max-w-[250px]">
+          {emails && emails.length > 0 ? emails[0] : "N/A"}
+          {emails && emails.length > 1 && <span className="text-xs text-gray-500 ml-1">+{emails.length - 1}</span>}
+        </div>
+      );
+    }
   },
   {
     accessorKey: "phones",
     header: ({ column }) => <SortableHeader column={column} title="Phones" />,
-    cell: ({ row }) => <div>{row.getValue("phones")}</div>,
+    cell: ({ row }) => {
+      const phones = row.getValue("phones") as string[];
+      return (
+        <div className="truncate max-w-[120px] md:max-w-[150px]">
+          {phones && phones.length > 0 ? phones[0] : "N/A"}
+          {phones && phones.length > 1 && <span className="text-xs text-gray-500 ml-1">+{phones.length - 1}</span>}
+        </div>
+      );
+    }
   },
   {
     accessorKey: "category",
@@ -169,12 +180,30 @@ const UserActions: React.FC<{
   </DropdownMenu>
 );
 
-export const UsersList: React.FC<UsersListProps> = ({ users, onEdit, onDelete }) => {
+export const UsersList: React.FC<UsersListProps> = ({ users, onEdit, onDelete, itemsPerPage = 10, currentPage = 1 }) => {
 
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([]);
-  const [columnVisibility, setColumnVisibility] = React.useState<VisibilityState>({});
+  const [columnVisibility, setColumnVisibility] = React.useState<VisibilityState>({
+    // Hide less important columns on mobile
+    phones: window?.innerWidth > 640,
+    category: window?.innerWidth > 480,
+  });
   const [rowSelection, setRowSelection] = React.useState({});
+
+  // Update column visibility on window resize
+  React.useEffect(() => {
+    const handleResize = () => {
+      setColumnVisibility({
+        ...columnVisibility,
+        phones: window.innerWidth > 640,
+        category: window.innerWidth > 480,
+      });
+    };
+
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, [columnVisibility]);
 
   const columns = React.useMemo(() => createColumns(onEdit, onDelete), [onEdit, onDelete]);
 
@@ -195,19 +224,26 @@ export const UsersList: React.FC<UsersListProps> = ({ users, onEdit, onDelete })
       columnVisibility,
       rowSelection,
     },
+    initialState: {
+      pagination: {
+        pageSize: itemsPerPage,
+        pageIndex: currentPage - 1,
+      },
+    },
   });
 
   return (
     <div className="w-full space-y-4">
       <Filters table={table} />
 
-      <div className="rounded-md border h-[65vh] overflow-auto">
-        <Table>
+      <div className="rounded-md border h-[50vh] sm:h-[55vh] md:h-[60vh] lg:h-[65vh] overflow-auto">
+        <div className="w-full min-w-max overflow-auto">
+          <Table>
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (
               <TableRow key={headerGroup.id}>
                 {headerGroup.headers.map((header) => (
-                  <TableHead key={header.id}>
+                  <TableHead key={header.id} className="px-2 py-2 sm:px-4 sm:py-3 text-xs sm:text-sm">
                     {header.isPlaceholder
                       ? null
                       : flexRender(
@@ -227,7 +263,7 @@ export const UsersList: React.FC<UsersListProps> = ({ users, onEdit, onDelete })
                   data-state={row.getIsSelected() && "selected"}
                 >
                   {row.getVisibleCells().map((cell) => (
-                    <TableCell key={cell.id}>
+                    <TableCell key={cell.id} className="px-2 py-2 sm:px-4 sm:py-3 text-xs sm:text-sm">
                       {flexRender(
                         cell.column.columnDef.cell,
                         cell.getContext()
@@ -247,18 +283,20 @@ export const UsersList: React.FC<UsersListProps> = ({ users, onEdit, onDelete })
               </TableRow>
             )}
           </TableBody>
-        </Table>
+          </Table>
+        </div>
       </div>
 
-      <div className="flex items-center justify-between">
-        <div className="text-sm text-muted-foreground">
+      <div className="flex flex-col sm:flex-row items-center justify-between gap-2 sm:gap-0">
+        <div className="text-xs sm:text-sm text-muted-foreground order-2 sm:order-1">
           {table.getFilteredSelectedRowModel().rows.length} of {" "}
           {table.getFilteredRowModel().rows.length} row(s) selected.
         </div>
-        <div className="space-x-2">
+        <div className="space-x-2 order-1 sm:order-2 w-full sm:w-auto flex justify-center sm:justify-end">
           <Button
             variant="outline"
             size="sm"
+            className="text-xs sm:text-sm h-8 px-2 sm:px-3"
             onClick={() => table.previousPage()}
             disabled={!table.getCanPreviousPage()}
           >
@@ -267,6 +305,7 @@ export const UsersList: React.FC<UsersListProps> = ({ users, onEdit, onDelete })
           <Button
             variant="outline"
             size="sm"
+            className="text-xs sm:text-sm h-8 px-2 sm:px-3"
             onClick={() => table.nextPage()}
             disabled={!table.getCanNextPage()}
           >
